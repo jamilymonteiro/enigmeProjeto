@@ -14,28 +14,32 @@ public class CategoriaController {
     @Autowired
     private CategoriaService categoriaService;
 
-    @PostMapping
+    @PostMapping("/categoria")
     public ResponseEntity<Categoria> salvar(@RequestBody Categoria categoria) {
         return categoriaService.salvar(categoria);
     }
 
-    @GetMapping
-    public Iterable<Categoria> listarTodos() {
+    @GetMapping("/categoria")
+    public Iterable<Categoria> listarTodos (){
         return categoriaService.listarTodos();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Categoria> buscarPorId(@PathVariable Long id) {
+    @GetMapping("/categoria/{id}")
+    public ResponseEntity<Categoria> buscarPorId(@PathVariable Long id){
         return categoriaService.buscarPorId(id);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        return categoriaService.deletar(id);
+    @DeleteMapping("/categoria/{id}")
+    public ResponseEntity<Void> deletarCategoria(@PathVariable Long id) {
+        categoriaService.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Categoria> atualizar(@PathVariable Long id, @RequestBody Categoria categoria) {
-        return categoriaService.atualizar(id, categoria);
+    @PutMapping("/categoria/{id}")
+    public ResponseEntity<Categoria> atualizar(
+            @PathVariable Long id,
+            @RequestBody Categoria categoria){
+        categoria.setId(id);
+        return categoriaService.salvar(categoria);
     }
 }

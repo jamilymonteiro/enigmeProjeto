@@ -10,44 +10,40 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProdutoEstoqueService {
     @Autowired
     private ProdutoEstoqueRepository produtoEstoqueRepository;
 
-    public Iterable<ProdutoEstoque> listarTodos() {
-        return produtoEstoqueRepository.findAll();
+    public List<ProdutoEstoque> listarTodos() {
+        return (List<ProdutoEstoque>) produtoEstoqueRepository.findAll();
     }
 
-    public ResponseEntity<ProdutoEstoque> salvar(ProdutoEstoque produtoEstoque) {
-        if (produtoEstoque.getProduto() == null || produtoEstoque.getEstoque() == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public Optional<ProdutoEstoque> buscarPorId(Long id) {
+        return produtoEstoqueRepository.findById(id);
+    }
+
+    public ProdutoEstoque salvar(ProdutoEstoque produtoEstoque) {
+        return produtoEstoqueRepository.save(produtoEstoque);
+    }
+
+    public ProdutoEstoque atualizar(Long id, ProdutoEstoque produtoEstoqueAtualizado) {
+        Optional<ProdutoEstoque> produtoEstoqueExistente = produtoEstoqueRepository.findById(id);
+        if (produtoEstoqueExistente.isPresent()) {
+            ProdutoEstoque produtoEstoque = produtoEstoqueExistente.get();
+            produtoEstoque.setProduto(produtoEstoqueAtualizado.getProduto());
+            produtoEstoque.setPreco(produtoEstoqueAtualizado.getPreco());
+            produtoEstoque.setEstoque(produtoEstoqueAtualizado.getEstoque());
+            return produtoEstoqueRepository.save(produtoEstoque);
+        } else {
+            throw new RuntimeException("Produto em Estoque não encontrado com o ID: " + id);
         }
-        return new ResponseEntity<>(produtoEstoqueRepository.save(produtoEstoque), HttpStatus.CREATED);
     }
 
-    public ResponseEntity<ProdutoEstoque> buscarPorId(Long id) {
-        return new ResponseEntity<>(produtoEstoqueRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("ProdutoEstoque não encontrado com o ID " + id)), HttpStatus.OK);
-    }
-
-    @Transactional
-    public void deletar(Long id) {
-        ProdutoEstoque produtoEstoque = produtoEstoqueRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("ProdutoEstoque não encontrado com o ID " + id));
-        produtoEstoqueRepository.delete(produtoEstoque);
-    }
-
-    public List<ProdutoEstoque> buscarPorProduto(Long produtoId) {
-        return produtoEstoqueRepository.findByProdutoId(produtoId);
-    }
-
-    public List<ProdutoEstoque> buscarPorEstoque(Long estoqueId) {
-        return produtoEstoqueRepository.findByEstoqueId(estoqueId);
-    }
-
-    public List<ProdutoEstoque> buscarPorPreco(float preco) {
-        return produtoEstoqueRepository.findByPreco(preco);
+    public ResponseEntity deletar(Long id) {
+        produtoEstoqueRepository.deleteById(id);
+        return new ResponseEntity("{\"mensagem\":\"Removido com sucesso\"}", HttpStatus.OK);
     }
 }

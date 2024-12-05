@@ -16,30 +16,21 @@ public class ImagemProdutoService {
     @Autowired
     private ImagemProdutoRepository imagemProdutoRepository;
 
-    public Iterable<ImagemProduto> listarTodos() {
+    public Iterable<ImagemProduto> listarTodos (){
+
         return imagemProdutoRepository.findAll();
     }
 
-    public ResponseEntity<ImagemProduto> salvar(ImagemProduto imagemProduto) {
-        if (imagemProduto.getEnderecoArquivo() == null || imagemProduto.getEnderecoArquivo().isEmpty() || imagemProduto.getProduto() == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(imagemProdutoRepository.save(imagemProduto), HttpStatus.CREATED);
+    public ResponseEntity<ImagemProduto> salvar (ImagemProduto imagemProduto){
+        return new ResponseEntity<ImagemProduto>(imagemProdutoRepository.save(imagemProduto), HttpStatus.OK);
     }
 
     public ResponseEntity<ImagemProduto> buscarPorId(Long id) {
-        return new ResponseEntity<>(imagemProdutoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Imagem do Produto não encontrada com o ID " + id)), HttpStatus.OK);
+        return new ResponseEntity<ImagemProduto>(imagemProdutoRepository.findById(id).orElseThrow(),HttpStatus.OK);
     }
 
-    @Transactional
-    public void deletar(Long id) {
-        ImagemProduto imagemProduto = imagemProdutoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Imagem do Produto não encontrada com o ID " + id));
-        imagemProdutoRepository.delete(imagemProduto);
-    }
-
-    public List<ImagemProduto> buscarPorProduto(Long produtoId) {
-        return imagemProdutoRepository.findByProdutoId(produtoId);
+    public ResponseEntity deletar(Long id) {
+        imagemProdutoRepository.deleteById(id);
+        return new ResponseEntity("{\"mensagem\":\"Removido com sucesso\"}",HttpStatus.OK);
     }
 }

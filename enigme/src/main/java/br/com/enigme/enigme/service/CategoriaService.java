@@ -17,26 +17,22 @@ public class CategoriaService {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
-    public Iterable<Categoria> listarTodos() {
+
+    public Iterable<Categoria> listarTodos (){
         return categoriaRepository.findAll();
     }
 
-    public ResponseEntity<Categoria> salvar(Categoria categoria) {
-        if (categoria.getNome() == null || categoria.getNome().isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(categoriaRepository.save(categoria), HttpStatus.CREATED);
+    public ResponseEntity<Categoria> salvar (Categoria cliente){
+        return new ResponseEntity<Categoria>(categoriaRepository.save(cliente), HttpStatus.OK);
     }
 
     public ResponseEntity<Categoria> buscarPorId(Long id) {
-        return new ResponseEntity<>(categoriaRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada com o ID " + id)), HttpStatus.OK);
+        return new ResponseEntity<Categoria>(categoriaRepository.findById(id).orElseThrow(),HttpStatus.OK);
     }
 
     @Transactional
-    public void deletar(Long id) {
-        Categoria categoria = categoriaRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada com o ID " + id));
-        categoriaRepository.delete(categoria);
+    public ResponseEntity<Void> deletar(Long id) {
+        categoriaRepository.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

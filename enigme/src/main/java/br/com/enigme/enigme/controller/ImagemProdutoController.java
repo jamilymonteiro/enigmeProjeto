@@ -14,42 +14,31 @@ public class ImagemProdutoController {
     @Autowired
     private ImagemProdutoService imagemProdutoService;
 
-    @PostMapping
-    public ResponseEntity<ImagemProduto> salvar(@RequestBody ImagemProduto imagemProduto) {
-        ImagemProduto imagemProdutoSalva = imagemProdutoService.salvar(imagemProduto);
-        return ResponseEntity.ok(imagemProdutoSalva);
+    @PostMapping("/imagemProduto")
+    public ResponseEntity<ImagemProduto> salvar (@RequestBody ImagemProduto imagemProduto){
+        return imagemProdutoService.salvar(imagemProduto);
     }
 
-    @GetMapping
-    public ResponseEntity<Iterable<ImagemProduto>> listarTodos() {
-        Iterable<ImagemProduto> imagens = imagemProdutoService.listarTodos();
-        return ResponseEntity.ok(imagens);
+    @GetMapping("/imagemProduto")
+    public Iterable<ImagemProduto> listarTodos (){
+        return imagemProdutoService.listarTodos();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ImagemProduto> buscarPorId(@PathVariable Long id) {
-        ImagemProduto imagemProduto = imagemProdutoService.buscarPorId(id);
-        if (imagemProduto != null) {
-            return ResponseEntity.ok(imagemProduto);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("/imagemProduto/{id}")
+    public ResponseEntity<ImagemProduto> buscarPorId(@PathVariable Long id){
+        return imagemProdutoService.buscarPorId(id);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        boolean deletado = imagemProdutoService.deletar(id);
-        if (deletado) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @DeleteMapping("/imagemProduto/{id}")
+    public ResponseEntity deletar(@PathVariable Long id){
+        return imagemProdutoService.deletar(id);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ImagemProduto> atualizar(@PathVariable Long id, @RequestBody ImagemProduto imagemProduto) {
+    @PutMapping("/imagemProduto/{id}")
+    public ResponseEntity<ImagemProduto> atualizar(
+            @PathVariable Long id,
+            @RequestBody ImagemProduto imagemProduto){
         imagemProduto.setId(id);
-        ImagemProduto imagemProdutoAtualizada = imagemProdutoService.salvar(imagemProduto);
-        return ResponseEntity.ok(imagemProdutoAtualizada);
+        return imagemProdutoService.salvar(imagemProduto);
     }
 }

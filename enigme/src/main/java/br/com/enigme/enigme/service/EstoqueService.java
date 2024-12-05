@@ -17,38 +17,21 @@ public class EstoqueService {
     @Autowired
     private EstoqueRepository estoqueRepository;
 
-    public Iterable<Estoque> listarTodos() {
+    public Iterable<Estoque> listarTodos (){
         return estoqueRepository.findAll();
     }
 
-    public ResponseEntity<Estoque> salvar(Estoque estoque) {
-        if (estoque.getProduto() == null || estoque.getQuantidade() < 0) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(estoqueRepository.save(estoque), HttpStatus.CREATED);
+    public ResponseEntity<Estoque> salvar (Estoque estoque){
+        return new ResponseEntity<Estoque>(estoqueRepository.save(estoque), HttpStatus.OK);
     }
 
     public ResponseEntity<Estoque> buscarPorId(Long id) {
-        return new ResponseEntity<>(estoqueRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Estoque não encontrado com o ID " + id)), HttpStatus.OK);
+        return new ResponseEntity<Estoque>(estoqueRepository.findById(id).orElseThrow(),HttpStatus.OK);
     }
 
-    @Transactional
-    public void deletar(Long id) {
-        Estoque estoque = estoqueRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Estoque não encontrado com o ID " + id));
-        estoqueRepository.delete(estoque);
+    public ResponseEntity deletar(Long id) {
+        estoqueRepository.deleteById(id);
+        return new ResponseEntity("{\"mensagem\":\"Removido com sucesso\"}",HttpStatus.OK);
     }
 
-    public List<Estoque> buscarPorProduto(Long produtoId) {
-        return estoqueRepository.findByProdutoId(produtoId);
-    }
-
-    @Transactional
-    public void atualizarQuantidade(Long id, int quantidade) {
-        Estoque estoque = estoqueRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Estoque não encontrado com o ID " + id));
-        estoque.setQuantidade(quantidade);
-        estoqueRepository.save(estoque);
-    }
 }

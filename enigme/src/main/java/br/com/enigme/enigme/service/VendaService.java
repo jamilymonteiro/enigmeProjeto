@@ -16,34 +16,38 @@ public class VendaService {
     @Autowired
     private VendaRepository vendaRepository;
 
-    public Iterable<Venda> listarTodos() {
-        return vendaRepository.findAll();
+    public Iterable<Venda> listarTodos(){
+        Iterable<Venda> vendas = vendaRepository.findAll();
+        return vendas;
     }
 
-    public ResponseEntity<Venda> salvar(Venda venda) {
-        if (venda.getCliente() == null || venda.getEndereco() == null || venda.getData() == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(vendaRepository.save(venda), HttpStatus.CREATED);
+    public ResponseEntity<Venda> salvar(Venda venda){
+        Venda novaVenda = vendaRepository.save(venda);
+        return new ResponseEntity<>(novaVenda, HttpStatus.CREATED);
     }
 
-    public ResponseEntity<Venda> buscarPorId(Long id) {
-        return new ResponseEntity<>(vendaRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Venda não encontrada com o ID " + id)), HttpStatus.OK);
+    public ResponseEntity<Venda> vendaAdd(Venda venda) {
+        return salvar(venda);
     }
 
-    @Transactional
-    public void deletar(Long id) {
-        Venda venda = vendaRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Venda não encontrada com o ID " + id));
-        vendaRepository.delete(venda);
+    public ResponseEntity<Venda> buscarPorId(Long id){
+        Venda venda = vendaRepository.findById(id).get();
+        return new ResponseEntity<>(venda, HttpStatus.OK);
     }
 
-    public List<Venda> buscarPorCliente(Long clienteId) {
-        return vendaRepository.findByClienteId(clienteId);
+    public ResponseEntity<Venda> atualizar(Long id, Venda vendaAtualizada){
+        Venda vendaExistente = vendaRepository.findById(id).orElseThrow();
+
+        vendaExistente.setData(vendaAtualizada.getData());
+        vendaExistente.setCliente(vendaAtualizada.getCliente());
+        vendaExistente.setEndereco(vendaAtualizada.getEndereco());
+
+        Venda vendaSalva = vendaRepository.save(vendaExistente);
+        return new ResponseEntity<>(vendaSalva, HttpStatus.OK);
     }
 
-    public List<Venda> buscarPorData(LocalDate data) {
-        return vendaRepository.findByData(data);
+    public ResponseEntity<String> deletar(Long id){
+        vendaRepository.deleteById(id);
+        return new ResponseEntity<>("{\"mensagem\":\"Venda removida com sucesso\"}", HttpStatus.OK);
     }
 }

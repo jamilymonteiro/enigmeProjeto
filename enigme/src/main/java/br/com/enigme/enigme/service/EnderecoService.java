@@ -17,30 +17,20 @@ public class EnderecoService {
     @Autowired
     private EnderecoRepository enderecoRepository;
 
-    public Iterable<Endereco> listarTodos() {
+    public Iterable<Endereco> listarTodos (){
         return enderecoRepository.findAll();
     }
 
-    public ResponseEntity<Endereco> salvar(Endereco endereco) {
-        if (endereco.getRua() == null || endereco.getRua().isEmpty() || endereco.getCliente() == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(enderecoRepository.save(endereco), HttpStatus.CREATED);
+    public ResponseEntity<Endereco> salvar (Endereco endereco){
+        return new ResponseEntity<Endereco>(enderecoRepository.save(endereco), HttpStatus.OK);
     }
 
     public ResponseEntity<Endereco> buscarPorId(Long id) {
-        return new ResponseEntity<>(enderecoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Endereço não encontrado com o ID " + id)), HttpStatus.OK);
+        return new ResponseEntity<Endereco>(enderecoRepository.findById(id).orElseThrow(),HttpStatus.OK);
     }
 
-    @Transactional
-    public void deletar(Long id) {
-        Endereco endereco = enderecoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Endereço não encontrado com o ID " + id));
-        enderecoRepository.delete(endereco);
-    }
-
-    public List<Endereco> buscarPorCliente(Long clienteId) {
-        return enderecoRepository.findByClienteId(clienteId);
+    public ResponseEntity deletar(Long id) {
+        enderecoRepository.deleteById(id);
+        return new ResponseEntity("{\"mensagem\":\"Removido com sucesso\"}",HttpStatus.OK);
     }
 }

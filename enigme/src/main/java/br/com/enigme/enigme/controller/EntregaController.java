@@ -14,42 +14,31 @@ public class EntregaController {
     @Autowired
     private EntregaService entregaService;
 
-    @PostMapping
-    public ResponseEntity<Entrega> salvar(@RequestBody Entrega entrega) {
-        Entrega entregaSalva = entregaService.salvar(entrega);
-        return ResponseEntity.ok(entregaSalva);
+    @PostMapping("/entrega")
+    public ResponseEntity<Entrega> salvar (@RequestBody Entrega entrega){
+        return entregaService.salvar(entrega);
     }
 
-    @GetMapping
-    public ResponseEntity<Iterable<Entrega>> listarTodos() {
-        Iterable<Entrega> entregas = entregaService.listarTodos();
-        return ResponseEntity.ok(entregas);
+    @GetMapping("/entrega")
+    public Iterable<Entrega> listarTodos (){
+        return entregaService.listarTodos();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Entrega> buscarPorId(@PathVariable Long id) {
-        Entrega entrega = entregaService.buscarPorId(id);
-        if (entrega != null) {
-            return ResponseEntity.ok(entrega);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("/entrega/{id}")
+    public ResponseEntity<Entrega> buscarPorId(@PathVariable Long id){
+        return entregaService.buscarPorId(id);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        boolean deletado = entregaService.deletar(id);
-        if (deletado) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @DeleteMapping("/entrega/{id}")
+    public ResponseEntity deletar(@PathVariable Long id){
+        return entregaService.deletar(id);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Entrega> atualizar(@PathVariable Long id, @RequestBody Entrega entrega) {
+    @PutMapping("/entrega/{id}")
+    public ResponseEntity<Entrega> atualizar(
+            @PathVariable Long id,
+            @RequestBody Entrega entrega){
         entrega.setId(id);
-        Entrega entregaAtualizada = entregaService.salvar(entrega);
-        return ResponseEntity.ok(entregaAtualizada);
+        return entregaService.salvar(entrega);
     }
 }

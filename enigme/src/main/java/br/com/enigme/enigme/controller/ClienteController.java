@@ -6,50 +6,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping("/cliente")
 public class ClienteController {
-
     @Autowired
     private ClienteService clienteService;
 
-    @PostMapping
-    public ResponseEntity<Cliente> salvar(@RequestBody Cliente cliente) {
-        Cliente clienteSalvo = clienteService.salvar(cliente);
-        return ResponseEntity.ok(clienteSalvo);
+    @PostMapping("/cliente")
+    public ResponseEntity<Cliente> salvar (@RequestBody Cliente cliente){
+        return clienteService.salvar(cliente);
     }
 
-    @GetMapping
-    public ResponseEntity<Iterable<Cliente>> listarTodos() {
-        Iterable<Cliente> clientes = clienteService.listarTodos();
-        return ResponseEntity.ok(clientes);
+    @GetMapping("/cliente")
+    public Iterable<Cliente> listarTodos (){
+        return clienteService.listarTodos();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Cliente> buscarPorId(@PathVariable Long id) {
-        Cliente cliente = clienteService.buscarPorId(id);
-        if (cliente != null) {
-            return ResponseEntity.ok(cliente);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("/cliente/{id}")
+    public ResponseEntity<Cliente> buscarPorId(@PathVariable Long id){
+        return clienteService.buscarPorId(id);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        boolean deletado = clienteService.deletar(id);
-        if (deletado) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @DeleteMapping("/cliente/{id}")
+    public ResponseEntity deletar(@PathVariable Long id){
+        return clienteService.deletar(id);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Cliente> atualizar(@PathVariable Long id, @RequestBody Cliente cliente) {
+    @PutMapping("/cliente/{id}")
+    public ResponseEntity<Cliente> atualizar(
+            @PathVariable Long id,
+            @RequestBody Cliente cliente){
         cliente.setId(id);
-        Cliente clienteAtualizado = clienteService.salvar(cliente);
-        return ResponseEntity.ok(clienteAtualizado);
+        return clienteService.salvar(cliente);
     }
 }

@@ -14,42 +14,31 @@ public class EstoqueController {
     @Autowired
     private EstoqueService estoqueService;
 
-    @PostMapping
-    public ResponseEntity<Estoque> salvar(@RequestBody Estoque estoque) {
-        Estoque estoqueSalvo = estoqueService.salvar(estoque);
-        return ResponseEntity.ok(estoqueSalvo);
+    @PostMapping("/estoque")
+    public ResponseEntity<Estoque> salvar (@RequestBody Estoque estoque){
+        return estoqueService.salvar(estoque);
     }
 
-    @GetMapping
-    public ResponseEntity<Iterable<Estoque>> listarTodos() {
-        Iterable<Estoque> estoques = estoqueService.listarTodos();
-        return ResponseEntity.ok(estoques);
+    @GetMapping("/estoque")
+    public Iterable<Estoque> listarTodos (){
+        return estoqueService.listarTodos();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Estoque> buscarPorId(@PathVariable Long id) {
-        Estoque estoque = estoqueService.buscarPorId(id);
-        if (estoque != null) {
-            return ResponseEntity.ok(estoque);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("/estoque/{id}")
+    public ResponseEntity<Estoque> buscarPorId(@PathVariable Long id){
+        return estoqueService.buscarPorId(id);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        boolean deletado = estoqueService.deletar(id);
-        if (deletado) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @DeleteMapping("/estoque/{id}")
+    public ResponseEntity deletar(@PathVariable Long id){
+        return estoqueService.deletar(id);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Estoque> atualizar(@PathVariable Long id, @RequestBody Estoque estoque) {
+    @PutMapping("/estoque/{id}")
+    public ResponseEntity<Estoque> atualizar(
+            @PathVariable Long id,
+            @RequestBody Estoque estoque){
         estoque.setId(id);
-        Estoque estoqueAtualizado = estoqueService.salvar(estoque);
-        return ResponseEntity.ok(estoqueAtualizado);
+        return estoqueService.salvar(estoque);
     }
 }

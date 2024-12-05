@@ -16,30 +16,20 @@ public class TransportadoraService {
     @Autowired
     private TransportadoraRepository transportadoraRepository;
 
-    public Iterable<Transportadora> listarTodos() {
+    public Iterable<Transportadora> listarTodos (){
         return transportadoraRepository.findAll();
     }
 
-    public ResponseEntity<Transportadora> salvar(Transportadora transportadora) {
-        if (transportadora.getNome() == null || transportadora.getContato() == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(transportadoraRepository.save(transportadora), HttpStatus.CREATED);
+    public ResponseEntity<Transportadora> salvar (Transportadora transportadora){
+        return new ResponseEntity<Transportadora>(transportadoraRepository.save(transportadora), HttpStatus.OK);
     }
 
     public ResponseEntity<Transportadora> buscarPorId(Long id) {
-        return new ResponseEntity<>(transportadoraRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Transportadora não encontrada com o ID " + id)), HttpStatus.OK);
+        return new ResponseEntity<Transportadora>(transportadoraRepository.findById(id).orElseThrow(), HttpStatus.OK);
     }
 
-    @Transactional
-    public void deletar(Long id) {
-        Transportadora transportadora = transportadoraRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Transportadora não encontrada com o ID " + id));
-        transportadoraRepository.delete(transportadora);
-    }
-
-    public List<Transportadora> buscarPorNome(String nome) {
-        return transportadoraRepository.findByNomeContainingIgnoreCase(nome);
+    public ResponseEntity deletar(Long id) {
+        transportadoraRepository.deleteById(id);
+        return new ResponseEntity("{\"mensagem\":\"Removido com sucesso\"}", HttpStatus.OK);
     }
 }

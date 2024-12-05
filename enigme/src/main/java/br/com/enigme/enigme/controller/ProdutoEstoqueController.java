@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/produtoEstoque")
@@ -14,42 +16,29 @@ public class ProdutoEstoqueController {
     @Autowired
     private ProdutoEstoqueService produtoEstoqueService;
 
-    @PostMapping
-    public ResponseEntity<ProdutoEstoque> salvar(@RequestBody ProdutoEstoque produtoEstoque) {
-        ProdutoEstoque produtoEstoqueSalvo = produtoEstoqueService.salvar(produtoEstoque);
-        return ResponseEntity.ok(produtoEstoqueSalvo);
+    @PostMapping("/produtoEstoque")
+    public ProdutoEstoque salvar(@RequestBody ProdutoEstoque produtoEstoque){
+        return produtoEstoqueService.salvar(produtoEstoque);
     }
 
-    @GetMapping
-    public ResponseEntity<Iterable<ProdutoEstoque>> listarTodos() {
-        Iterable<ProdutoEstoque> produtosEstoque = produtoEstoqueService.listarTodos();
-        return ResponseEntity.ok(produtosEstoque);
+    @GetMapping("/produtoEstoque")
+    public Iterable<ProdutoEstoque> listarTodos (){
+        return produtoEstoqueService.listarTodos();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ProdutoEstoque> buscarPorId(@PathVariable Long id) {
-        ProdutoEstoque produtoEstoque = produtoEstoqueService.buscarPorId(id);
-        if (produtoEstoque != null) {
-            return ResponseEntity.ok(produtoEstoque);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("/produtoEstoque/{id}")
+    public Optional<ProdutoEstoque> buscarPorId(@PathVariable Long id){
+        return produtoEstoqueService.buscarPorId(id);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        boolean deletado = produtoEstoqueService.deletar(id);
-        if (deletado) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @DeleteMapping("/produtoEstoque/{id}")
+    public ResponseEntity deletar(@PathVariable Long id){
+        return produtoEstoqueService.deletar(id);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ProdutoEstoque> atualizar(@PathVariable Long id, @RequestBody ProdutoEstoque produtoEstoque) {
+    @PutMapping("/produtoEstoque/{id}")
+    public ProdutoEstoque atualizar(@PathVariable Long id, @RequestBody ProdutoEstoque produtoEstoque){
         produtoEstoque.setId(id);
-        ProdutoEstoque produtoEstoqueAtualizado = produtoEstoqueService.salvar(produtoEstoque);
-        return ResponseEntity.ok(produtoEstoqueAtualizado);
+        return produtoEstoqueService.salvar(produtoEstoque);
     }
 }

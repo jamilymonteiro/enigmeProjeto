@@ -14,42 +14,31 @@ public class EnderecoController {
     @Autowired
     private EnderecoService enderecoService;
 
-    @PostMapping
-    public ResponseEntity<Endereco> salvar(@RequestBody Endereco endereco) {
-        Endereco enderecoSalvo = enderecoService.salvar(endereco);
-        return ResponseEntity.ok(enderecoSalvo);
+    @PostMapping("/endereco")
+    public ResponseEntity<Endereco> salvar (@RequestBody Endereco endereco){
+        return enderecoService.salvar(endereco);
     }
 
-    @GetMapping
-    public ResponseEntity<Iterable<Endereco>> listarTodos() {
-        Iterable<Endereco> enderecos = enderecoService.listarTodos();
-        return ResponseEntity.ok(enderecos);
+    @GetMapping("/endereco")
+    public Iterable<Endereco> listarTodos (){
+        return enderecoService.listarTodos();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Endereco> buscarPorId(@PathVariable Long id) {
-        Endereco endereco = enderecoService.buscarPorId(id);
-        if (endereco != null) {
-            return ResponseEntity.ok(endereco);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("/endereco/{id}")
+    public ResponseEntity<Endereco> buscarPorId(@PathVariable Long id){
+        return enderecoService.buscarPorId(id);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        boolean deletado = enderecoService.deletar(id);
-        if (deletado) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @DeleteMapping("/endereco/{id}")
+    public ResponseEntity deletar(@PathVariable Long id){
+        return enderecoService.deletar(id);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Endereco> atualizar(@PathVariable Long id, @RequestBody Endereco endereco) {
+    @PutMapping("/endereco/{id}")
+    public ResponseEntity<Endereco> atualizar(
+            @PathVariable Long id,
+            @RequestBody Endereco endereco){
         endereco.setId(id);
-        Endereco enderecoAtualizado = enderecoService.salvar(endereco);
-        return ResponseEntity.ok(enderecoAtualizado);
+        return enderecoService.salvar(endereco);
     }
 }

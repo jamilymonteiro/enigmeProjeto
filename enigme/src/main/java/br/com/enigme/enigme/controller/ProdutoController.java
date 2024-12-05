@@ -15,27 +15,29 @@ public class ProdutoController {
     private ProdutoService produtoService;
 
     @PostMapping("/produto")
-    public ResponseEntity<Produto> salvar(@RequestBody Produto produto) {
+    public ResponseEntity<Produto> salvar (@RequestBody Produto produto){
         return produtoService.salvar(produto);
     }
 
     @GetMapping("/produto")
-    public Iterable<Produto> listarTodos() {
+    public Iterable<Produto> listarTodos (){
         return produtoService.listarTodos();
     }
 
     @GetMapping("/produto/{id}")
-    public ResponseEntity<Produto> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<Produto> buscarPorId(@PathVariable Long id){
         return produtoService.buscarPorId(id);
     }
 
     @DeleteMapping("/produto/{id}")
-    public ResponseEntity deletar(@PathVariable Long id) {
+    public ResponseEntity deletar(@PathVariable Long id){
         return produtoService.deletar(id);
     }
 
     @PutMapping("/produto/{id}")
-    public ResponseEntity<Produto> atualizar(@PathVariable Long id, @RequestBody Produto produto) {
+    public ResponseEntity<Produto> atualizar(
+            @PathVariable Long id,
+            @RequestBody Produto produto){
         produto.setId(id);
         return produtoService.salvar(produto);
     }

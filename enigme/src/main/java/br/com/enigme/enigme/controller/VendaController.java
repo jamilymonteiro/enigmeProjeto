@@ -15,30 +15,33 @@ public class VendaController {
     @Autowired
     private VendaService vendaService;
 
-    @PostMapping
-    public ResponseEntity<Venda> salvar(@RequestBody Venda venda) {
-        return vendaService.salvar(venda);
+    @PostMapping("/venda")
+    public ResponseEntity<Venda> salvar(@RequestBody Venda venda){
+        return  vendaService.salvar(venda);
     }
 
-    @GetMapping
-    public Iterable<Venda> listarTodos() {
+    @PostMapping("/venda/add")
+    public ResponseEntity<Venda> addVenda(@RequestBody Venda venda) { return vendaService.vendaAdd(venda); }
+
+    @GetMapping("/venda")
+    public Iterable<Venda> listarTodos(){
         return vendaService.listarTodos();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Venda> buscarPorId(@PathVariable Long id) {
+    @GetMapping("/venda/{id}")
+    public ResponseEntity<Venda> buscarPorId(@PathVariable Long id){
         return vendaService.buscarPorId(id);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+    @DeleteMapping("/venda/{id}")
+    public ResponseEntity deletar(@PathVariable Long id){
         return vendaService.deletar(id);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/venda/{id}")
     public ResponseEntity<Venda> atualizar(
             @PathVariable Long id,
-            @RequestBody Venda venda) {
+            @RequestBody Venda venda){
         venda.setId(id);
         return vendaService.salvar(venda);
     }

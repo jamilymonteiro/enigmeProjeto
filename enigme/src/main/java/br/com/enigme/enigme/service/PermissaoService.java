@@ -16,30 +16,20 @@ public class PermissaoService {
     @Autowired
     private PermissaoRepository permissaoRepository;
 
-    public Iterable<Permissao> listarTodos() {
+    public Iterable<Permissao> listarTodos (){
         return permissaoRepository.findAll();
     }
 
-    public ResponseEntity<Permissao> salvar(Permissao permissao) {
-        if (permissao.getNome() == null || permissao.getNome().isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(permissaoRepository.save(permissao), HttpStatus.CREATED);
+    public ResponseEntity<Permissao> salvar (Permissao permissao){
+        return new ResponseEntity<Permissao>(permissaoRepository.save(permissao), HttpStatus.OK);
     }
 
     public ResponseEntity<Permissao> buscarPorId(Long id) {
-        return new ResponseEntity<>(permissaoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Permissão não encontrada com o ID " + id)), HttpStatus.OK);
+        return new ResponseEntity<Permissao>(permissaoRepository.findById(id).orElseThrow(),HttpStatus.OK);
     }
 
-    @Transactional
-    public void deletar(Long id) {
-        Permissao permissao = permissaoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Permissão não encontrada com o ID " + id));
-        permissaoRepository.delete(permissao);
-    }
-
-    public List<Permissao> buscarPorNome(String nome) {
-        return permissaoRepository.findByNome(nome);
+    public ResponseEntity deletar(Long id) {
+        permissaoRepository.deleteById(id);
+        return new ResponseEntity("{\"mensagem\":\"Removido com sucesso\"}",HttpStatus.OK);
     }
 }

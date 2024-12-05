@@ -15,29 +15,30 @@ public class AvaliacaoController {
     @Autowired
     private AvaliacaoService avaliacaoService;
 
-    @PostMapping
-    public ResponseEntity<Avaliacao> salvar(@RequestBody Avaliacao avaliacao) {
+    @PostMapping("/avaliacao")
+    public ResponseEntity<Avaliacao> salvar (@RequestBody Avaliacao avaliacao){
         return avaliacaoService.salvar(avaliacao);
     }
 
-    @GetMapping
-    public Iterable<Avaliacao> listarTodos() {
+    @GetMapping("/avaliacao")
+    public Iterable<Avaliacao> listarTodos (){
         return avaliacaoService.listarTodos();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Avaliacao> buscarPorId(@PathVariable Long id) {
+    @GetMapping("/avaliacao/{id}")
+    public ResponseEntity<Avaliacao> buscarPorId(@PathVariable Long id){
         return avaliacaoService.buscarPorId(id);
     }
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+
+    @DeleteMapping("/avaliacao/{id}")
+    public ResponseEntity deletar(@PathVariable Long id){
         return avaliacaoService.deletar(id);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/avaliacao/{id}")
     public ResponseEntity<Avaliacao> atualizar(
             @PathVariable Long id,
-            @RequestBody Avaliacao avaliacao) {
+            @RequestBody Avaliacao avaliacao){
         avaliacao.setId(id);
         return avaliacaoService.salvar(avaliacao);
     }

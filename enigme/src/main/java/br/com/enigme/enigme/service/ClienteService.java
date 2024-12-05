@@ -17,32 +17,21 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
-    public Iterable<Cliente> listarTodos() {
+    public Iterable<Cliente> listarTodos (){
         return clienteRepository.findAll();
     }
 
-    public ResponseEntity<Cliente> salvar(Cliente cliente) {
-        if (cliente.getNome() == null || cliente.getNome().isEmpty() || cliente.getEmail() == null || cliente.getEmail().isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(clienteRepository.save(cliente), HttpStatus.CREATED);
+    public ResponseEntity<Cliente> salvar (Cliente cliente){
+        return new ResponseEntity<Cliente>(clienteRepository.save(cliente), HttpStatus.OK);
     }
 
     public ResponseEntity<Cliente> buscarPorId(Long id) {
-        return new ResponseEntity<>(clienteRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado com o ID " + id)), HttpStatus.OK);
+        return new ResponseEntity<Cliente>(clienteRepository.findById(id).orElseThrow(),HttpStatus.OK);
     }
 
     @Transactional
-    public void deletar(Long id) {
-        Cliente cliente = clienteRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado com o ID " + id));
-        clienteRepository.delete(cliente);
-    }
-
-    public ResponseEntity<Cliente> buscarPorLogin(String login) {
-        Optional<Cliente> cliente = clienteRepository.findByLogin(login);
-        return cliente.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<Void> deletar(Long id) {
+        clienteRepository.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
