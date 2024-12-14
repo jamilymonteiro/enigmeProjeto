@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping("/categoria")
 public class CategoriaController {
 
     @Autowired
@@ -30,9 +29,8 @@ public class CategoriaController {
     }
 
     @DeleteMapping("/categoria/{id}")
-    public ResponseEntity<Void> deletarCategoria(@PathVariable Long id) {
-        categoriaService.deletar(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        return categoriaService.deletar(id);
     }
 
     @PutMapping("/categoria/{id}")

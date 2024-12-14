@@ -10,13 +10,4 @@ import java.util.List;
 
 @Repository
 public interface PermissaoRepository extends CrudRepository<Permissao, Long> {
-
-    @Query("SELECT p FROM Permissao p WHERE p.nome = :nome")
-    List<Permissao> findPermissoesByNome(@Param("nome") String nome);
-
-    @Query("SELECT p FROM Permissao p WHERE p.id = :id")
-    Permissao findPermissaoById(@Param("id") Long id);
-
-    @Query("SELECT p FROM Permissao p ORDER BY p.nome ASC")
-    List<Permissao> findAllPermissoesOrderedByName();
 }

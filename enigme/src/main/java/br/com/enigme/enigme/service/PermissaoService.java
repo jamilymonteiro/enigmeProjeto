@@ -30,6 +30,6 @@ public class PermissaoService {
 
     public ResponseEntity deletar(Long id) {
         permissaoRepository.deleteById(id);
-        return new ResponseEntity("{\"mensagem\":\"Removido com sucesso\"}",HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

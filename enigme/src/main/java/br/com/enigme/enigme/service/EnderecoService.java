@@ -31,6 +31,6 @@ public class EnderecoService {
 
     public ResponseEntity deletar(Long id) {
         enderecoRepository.deleteById(id);
-        return new ResponseEntity("{\"mensagem\":\"Removido com sucesso\"}",HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -49,172 +49,217 @@ const _nav = [
   },
   {
     component: CNavGroup,
-    name: 'Base',
-    to: '/base',
+    name: 'Perfumes',
+    to: '/produto',
     icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'Accordion',
-        to: '/base/accordion',
+        name: 'Adicionar',
+        to: '/produto/add',
       },
       {
         component: CNavItem,
-        name: 'Breadcrumb',
-        to: '/base/breadcrumbs',
-      },
-      {
-        component: CNavItem,
-        name: (
-          <React.Fragment>
-            {'Calendar'}
-            <CIcon icon={cilExternalLink} size="sm" className="ms-2" />
-          </React.Fragment>
-        ),
-        href: 'https://coreui.io/react/docs/components/calendar/',
-        badge: {
-          color: 'danger',
-          text: 'PRO',
-        },
-      },
-      {
-        component: CNavItem,
-        name: 'Cards',
-        to: '/base/cards',
-      },
-      {
-        component: CNavItem,
-        name: 'Carousel',
-        to: '/base/carousels',
-      },
-      {
-        component: CNavItem,
-        name: 'Collapse',
-        to: '/base/collapses',
-      },
-      {
-        component: CNavItem,
-        name: 'List group',
-        to: '/base/list-groups',
-      },
-      {
-        component: CNavItem,
-        name: 'Navs & Tabs',
-        to: '/base/navs',
-      },
-      {
-        component: CNavItem,
-        name: 'Pagination',
-        to: '/base/paginations',
-      },
-      {
-        component: CNavItem,
-        name: 'Placeholders',
-        to: '/base/placeholders',
-      },
-      {
-        component: CNavItem,
-        name: 'Popovers',
-        to: '/base/popovers',
-      },
-      {
-        component: CNavItem,
-        name: 'Progress',
-        to: '/base/progress',
-      },
-      {
-        component: CNavItem,
-        name: 'Smart Pagination',
-        href: 'https://coreui.io/react/docs/components/smart-pagination/',
-        badge: {
-          color: 'danger',
-          text: 'PRO',
-        },
-      },
-      {
-        component: CNavItem,
-        name: (
-          <React.Fragment>
-            {'Smart Table'}
-            <CIcon icon={cilExternalLink} size="sm" className="ms-2" />
-          </React.Fragment>
-        ),
-        href: 'https://coreui.io/react/docs/components/smart-table/',
-        badge: {
-          color: 'danger',
-          text: 'PRO',
-        },
-      },
-      {
-        component: CNavItem,
-        name: 'Spinners',
-        to: '/base/spinners',
-      },
-      {
-        component: CNavItem,
-        name: 'Tables',
-        to: '/base/tables',
-      },
-      {
-        component: CNavItem,
-        name: 'Tabs',
-        to: '/base/tabs',
-      },
-      {
-        component: CNavItem,
-        name: 'Tooltips',
-        to: '/base/tooltips',
-      },
-      {
-        component: CNavItem,
-        name: (
-          <React.Fragment>
-            {'Virtual Scroller'}
-            <CIcon icon={cilExternalLink} size="sm" className="ms-2" />
-          </React.Fragment>
-        ),
-        href: 'https://coreui.io/react/docs/components/virtual-scroller/',
-        badge: {
-          color: 'danger',
-          text: 'PRO',
-        },
+        name: 'Listar',
+        to: '/produto/list',
       },
     ],
   },
   {
     component: CNavGroup,
-    name: 'Buttons',
-    to: '/buttons',
+    name: 'Avaliação',
+    to: '/avaliacao',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Adicionar',
+        to: '/avaliacao/add',
+      },
+      {
+        component: CNavItem,
+        name: 'Listar',
+        to: '/avaliacao/list',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Categoria',
+    to: '/categoria',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Adicionar',
+        to: '/categoria/add',
+      },
+      {
+        component: CNavItem,
+        name: 'Listar',
+        to: '/categoria/list',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Cliente',
+    to: '/cliente',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Adicionar',
+        to: '/cliente/add',
+      },
+      {
+        component: CNavItem,
+        name: 'Listar',
+        to: '/cliente/list',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Endereço',
+    to: '/endereco',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Adicionar',
+        to: '/endereco/add',
+      },
+      {
+        component: CNavItem,
+        name: 'Listar',
+        to: '/endereco/list',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Entrega',
+    to: '/entrega',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Adicionar',
+        to: '/entrega/add',
+      },
+      {
+        component: CNavItem,
+        name: 'Listar',
+        to: '/entrega/list',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Imagem Produto',
+    to: '/imagemProduto',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Adicionar',
+        to: '/imagemProduto/add',
+      },
+      {
+        component: CNavItem,
+        name: 'Listar',
+        to: '/imagemProduto/list',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Pagamento',
+    to: '/pagamento',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Adicionar',
+        to: '/pagamento/add',
+      },
+      {
+        component: CNavItem,
+        name: 'Listar',
+        to: '/pagamento/list',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Item Venda',
+    to: '/itemVenda',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Adicionar',
+        to: '/itemVenda/add',
+      },
+      {
+        component: CNavItem,
+        name: 'Listar',
+        to: '/itemVenda/list',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Estoque',
+    to: '/estoque',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Adicionar',
+        to: '/estoque/add',
+      },
+      {
+        component: CNavItem,
+        name: 'Listar',
+        to: '/estoque/list',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Transportadora',
+    to: '/transportadora',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Adicionar',
+        to: '/transportadora/add',
+      },
+      {
+        component: CNavItem,
+        name: 'Listar',
+        to: '/transportadora/list',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Venda',
+    to: '/venda',
     icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'Buttons',
-        to: '/buttons/buttons',
+        name: 'Adicionar',
+        to: '/venda/add',
       },
       {
         component: CNavItem,
-        name: 'Buttons groups',
-        to: '/buttons/button-groups',
-      },
-      {
-        component: CNavItem,
-        name: 'Dropdowns',
-        to: '/buttons/dropdowns',
-      },
-      {
-        component: CNavItem,
-        name: (
-          <React.Fragment>
-            {'Loading Button'}
-            <CIcon icon={cilExternalLink} size="sm" className="ms-2" />
-          </React.Fragment>
-        ),
-        href: 'https://coreui.io/react/docs/components/loading-button/',
-        badge: {
-          color: 'danger',
-          text: 'PRO',
-        },
+        name: 'Listar',
+        to: '/venda/list',
       },
     ],
   },
@@ -449,4 +494,3 @@ const _nav = [
 ]
 
 export default _nav
-//comentário
