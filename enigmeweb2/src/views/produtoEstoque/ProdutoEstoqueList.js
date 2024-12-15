@@ -24,52 +24,58 @@ import CIcon from '@coreui/icons-react';
 import api from '../../services/axiosConfig';
 
 const ProdutoEstoqueList = () => {
-  const [produtosEstoque, setProdutosEstoque] = useState([]);
+  const [produtoEstoques, setProdutoEstoques] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [produtoEstoqueSelecionado, setProdutoEstoqueSelecionado] = useState(null);
 
   const navigate = useNavigate();
 
-  const fetchProdutosEstoque = async () => {
+  // Função para buscar todos os produtos no estoque
+  const fetchProdutoEstoques = async () => {
     try {
-      const response = await api.get('/produtoestoque');
+      const response = await api.get('/produtoEstoque');
       const data = Array.isArray(response.data) ? response.data : [];
-      setProdutosEstoque(data);
+      setProdutoEstoques(data);
     } catch (error) {
-      console.error('Erro ao buscar produtos no estoque:', error);
-      setProdutosEstoque([]);
+      console.error('Erro ao buscar Produtos no Estoque:', error);
+      setProdutoEstoques([]);
     } finally {
       setLoading(false);
     }
   };
 
+  // Carregar lista de produtos no estoque quando o componente é montado
   useEffect(() => {
-    fetchProdutosEstoque();
+    fetchProdutoEstoques();
   }, []);
 
+  // Função para editar o produto no estoque
   const handleEdit = (id) => {
-    navigate(`/produtoestoque/add?id=${id}`);
+    navigate(`/produtoEstoque/add?id=${id}`);
   };
 
+  // Função para confirmar a exclusão
   const handleConfirmDelete = (produtoEstoque) => {
     setProdutoEstoqueSelecionado(produtoEstoque);
     setModalVisible(true);
   };
 
+  // Função para excluir o produto no estoque
   const handleDelete = async () => {
     if (produtoEstoqueSelecionado) {
       try {
-        await api.delete(`/produtoestoque/${produtoEstoqueSelecionado.id}`);
+        await api.delete(`/produtoEstoque/${produtoEstoqueSelecionado.id}`);
         setModalVisible(false);
         setProdutoEstoqueSelecionado(null);
-        fetchProdutosEstoque();
+        fetchProdutoEstoques(); // Recarregar a lista após exclusão
       } catch (error) {
-        console.error('Erro ao remover produto do estoque:', error);
+        console.error('Erro ao remover produto no estoque:', error);
       }
     }
   };
 
+  // Exibir mensagem de "Carregando..." enquanto os dados não são carregados
   if (loading) {
     return <div>Carregando...</div>;
   }
@@ -85,7 +91,6 @@ const ProdutoEstoqueList = () => {
             <CTable hover>
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell scope="col">ID</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Produto</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Preço</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Estoque</CTableHeaderCell>
@@ -93,9 +98,8 @@ const ProdutoEstoqueList = () => {
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                {produtosEstoque.map((produtoEstoque) => (
+                {produtoEstoques.map((produtoEstoque) => (
                   <CTableRow key={produtoEstoque.id}>
-                    <CTableHeaderCell scope="row">{produtoEstoque.id}</CTableHeaderCell>
                     <CTableDataCell>{produtoEstoque.produto?.nome}</CTableDataCell>
                     <CTableDataCell>{produtoEstoque.preco}</CTableDataCell>
                     <CTableDataCell>{produtoEstoque.estoque?.id}</CTableDataCell>
@@ -124,12 +128,13 @@ const ProdutoEstoqueList = () => {
         </CCard>
       </CCol>
 
+      {/* Modal de Confirmação de Exclusão */}
       <CModal visible={modalVisible} onClose={() => setModalVisible(false)}>
         <CModalHeader>
           <CModalTitle>Confirmar Exclusão</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          Tem certeza de que deseja remover o produto no estoque com ID "<strong>{produtoEstoqueSelecionado?.id}</strong>"?
+          Tem certeza de que deseja remover o produto no estoque "<strong>{produtoEstoqueSelecionado?.produto?.nome}</strong>"?
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={() => setModalVisible(false)}>

@@ -9,8 +9,6 @@ public class Entrega {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    private ItemVenda itemVenda;
     private int quantidade;
     @ManyToOne
     private Transportadora transportadora;

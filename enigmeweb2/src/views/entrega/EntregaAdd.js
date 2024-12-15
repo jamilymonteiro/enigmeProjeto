@@ -17,11 +17,9 @@ import api from '../../services/axiosConfig';
 import { useLocation } from 'react-router-dom';
 
 const EntregaAdd = () => {
-  const [itemVendas, setItemVendas] = useState([]);
   const [transportadoras, setTransportadoras] = useState([]);
-  const [itemVenda, setItemVenda] = useState('');
-  const [quantidade, setQuantidade] = useState('');
   const [transportadora, setTransportadora] = useState('');
+  const [quantidade, setQuantidade] = useState('');
   const [codigoRastreio, setCodigoRastreio] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -32,18 +30,14 @@ const EntregaAdd = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const responseItemVenda = await api.get('/itemVenda');
-        setItemVendas(responseItemVenda.data);
-
         const responseTransportadora = await api.get('/transportadora');
         setTransportadoras(responseTransportadora.data);
 
         if (entregaId) {
           const responseEntrega = await api.get(`/entrega/${entregaId}`);
-          const { itemVenda, quantidade, transportadora, codigoRastreio } = responseEntrega.data;
-          setItemVenda(itemVenda.id);
-          setQuantidade(quantidade);
+          const { transportadora, quantidade, codigoRastreio } = responseEntrega.data;
           setTransportadora(transportadora.id);
+          setQuantidade(quantidade);
           setCodigoRastreio(codigoRastreio);
         }
       } catch (error) {
@@ -58,9 +52,8 @@ const EntregaAdd = () => {
     e.preventDefault();
 
     const entregaData = {
-      itemVenda: { id: itemVenda }, // Enviando objeto relacionado com o ID
-      quantidade,
       transportadora: { id: transportadora }, // Enviando objeto relacionado com o ID
+      quantidade,
       codigoRastreio,
     };
 
@@ -79,9 +72,8 @@ const EntregaAdd = () => {
   };
 
   const resetForm = () => {
-    setItemVenda('');
-    setQuantidade('');
     setTransportadora('');
+    setQuantidade('');
     setCodigoRastreio('');
   };
 
@@ -91,32 +83,6 @@ const EntregaAdd = () => {
         <CCardBody>
           <h4>{entregaId ? 'Editar Entrega' : 'Adicionar Entrega'}</h4>
           <CForm onSubmit={handleSave}>
-            <div className="mb-3">
-              <CFormLabel htmlFor="itemVenda">Item Venda</CFormLabel>
-              <CFormSelect
-                id="itemVenda"
-                value={itemVenda}
-                onChange={(e) => setItemVenda(e.target.value)}
-                required
-              >
-                <option value="">Selecione um Item Venda</option>
-                {itemVendas.map((item) => (
-                  <option key={item.id} value={item.id}>
-                    {item.nome} {/* Adapte "nome" para o atributo correto */}
-                  </option>
-                ))}
-              </CFormSelect>
-            </div>
-            <div className="mb-3">
-              <CFormLabel htmlFor="quantidade">Quantidade</CFormLabel>
-              <CFormInput
-                type="number"
-                id="quantidade"
-                value={quantidade}
-                onChange={(e) => setQuantidade(e.target.value)}
-                required
-              />
-            </div>
             <div className="mb-3">
               <CFormLabel htmlFor="transportadora">Transportadora</CFormLabel>
               <CFormSelect
@@ -132,6 +98,16 @@ const EntregaAdd = () => {
                   </option>
                 ))}
               </CFormSelect>
+            </div>
+            <div className="mb-3">
+              <CFormLabel htmlFor="quantidade">Quantidade</CFormLabel>
+              <CFormInput
+                type="number"
+                id="quantidade"
+                value={quantidade}
+                onChange={(e) => setQuantidade(e.target.value)}
+                required
+              />
             </div>
             <div className="mb-3">
               <CFormLabel htmlFor="codigoRastreio">Código de Rastreamento</CFormLabel>

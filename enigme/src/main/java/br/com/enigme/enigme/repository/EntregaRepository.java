@@ -13,15 +13,9 @@ import java.util.List;
 @Repository
 public interface EntregaRepository extends CrudRepository<Entrega, Long> {
 
-    @Query("SELECT e FROM Entrega e WHERE e.itemVenda.id = :itemVendaId")
-    List<Entrega> findEntregasByItemVendaId(@Param("itemVendaId") Long itemVendaId);
-
     @Query("SELECT e FROM Entrega e WHERE e.transportadora.id = :transportadoraId")
     List<Entrega> findEntregasByTransportadoraId(@Param("transportadoraId") Long transportadoraId);
 
     @Query("SELECT e FROM Entrega e WHERE e.codigoRastreio = :codigoRastreio")
     List<Entrega> findEntregasByCodigoRastreio(@Param("codigoRastreio") String codigoRastreio);
-
-    @Query("SELECT e FROM Entrega e WHERE e.itemVenda.id = :itemVendaId AND e.transportadora.id = :transportadoraId")
-    List<Entrega> findEntregasByItemVendaIdAndTransportadoraId(@Param("itemVendaId") Long itemVendaId, @Param("transportadoraId") Long transportadoraId);
 }

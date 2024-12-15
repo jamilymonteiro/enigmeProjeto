@@ -157,24 +157,6 @@ const _nav = [
   },
   {
     component: CNavGroup,
-    name: 'Imagem Produto',
-    to: '/imagemProduto',
-    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
-    items: [
-      {
-        component: CNavItem,
-        name: 'Adicionar',
-        to: '/imagemProduto/add',
-      },
-      {
-        component: CNavItem,
-        name: 'Listar',
-        to: '/imagemProduto/list',
-      },
-    ],
-  },
-  {
-    component: CNavGroup,
     name: 'Pagamento',
     to: '/pagamento',
     icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
@@ -224,6 +206,24 @@ const _nav = [
         component: CNavItem,
         name: 'Listar',
         to: '/estoque/list',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Produto Estoque',
+    to: '/produtoEstoque',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Adicionar',
+        to: '/produtoEstoque/add',
+      },
+      {
+        component: CNavItem,
+        name: 'Listar',
+        to: '/produtoEstoque/list',
       },
     ],
   },

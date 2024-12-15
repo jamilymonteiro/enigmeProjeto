@@ -52,6 +52,7 @@ const EstoqueList = () => {
         <CTable hover>
           <CTableHead>
             <CTableRow>
+            <CTableHeaderCell>ID</CTableHeaderCell>
               <CTableHeaderCell>Produto</CTableHeaderCell>
               <CTableHeaderCell>Quantidade</CTableHeaderCell>
               <CTableHeaderCell>Ações</CTableHeaderCell>
@@ -60,6 +61,7 @@ const EstoqueList = () => {
           <CTableBody>
             {estoques.map((estoque) => (
               <CTableRow key={estoque.id}>
+                <CTableDataCell>{estoque.id}</CTableDataCell>
                 <CTableDataCell>{estoque.produto.nome}</CTableDataCell>
                 <CTableDataCell>{estoque.quantidade}</CTableDataCell>
                 <CTableDataCell>

@@ -20,7 +20,7 @@ const ItemVendaList = () => {
 
   const fetchItensVenda = async () => {
     try {
-      const response = await api.get('/item-venda');
+      const response = await api.get('/itemVenda');
       setItensVenda(response.data);
     } catch (error) {
       console.error('Erro ao carregar itens de venda:', error);
@@ -34,7 +34,7 @@ const ItemVendaList = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Deseja realmente excluir este item de venda?')) {
       try {
-        await api.delete(`/item-venda/${id}`);
+        await api.delete(`/itemVenda/${id}`);
         fetchItensVenda();
       } catch (error) {
         console.error('Erro ao excluir item de venda:', error);
@@ -47,35 +47,38 @@ const ItemVendaList = () => {
     <CCard>
       <CCardHeader>
         <h4>Itens de Venda</h4>
-        <CButton color="primary" onClick={() => navigate('/item-venda/add')}>
-          Adicionar Item de Venda
-        </CButton>
       </CCardHeader>
       <CCardBody>
         <CTable hover>
           <CTableHead>
             <CTableRow>
+            <CTableHeaderCell>Código</CTableHeaderCell>
               <CTableHeaderCell>Quantidade</CTableHeaderCell>
               <CTableHeaderCell>Valor Total</CTableHeaderCell>
               <CTableHeaderCell>Produto</CTableHeaderCell>
+              <CTableHeaderCell>Venda</CTableHeaderCell>
+              <CTableHeaderCell>Entrega</CTableHeaderCell>
               <CTableHeaderCell>Ações</CTableHeaderCell>
             </CTableRow>
           </CTableHead>
           <CTableBody>
-            {itensVenda.map((item) => (
-              <CTableRow key={item.id}>
-                <CTableDataCell>{item.quantidade}</CTableDataCell>
-                <CTableDataCell>{item.valor_total}</CTableDataCell>
-                <CTableDataCell>{item.produto?.nome}</CTableDataCell>
+            {itensVenda.map((itemVenda) => (
+              <CTableRow key={itemVenda.id}>
+                <CTableDataCell>{itemVenda.id}</CTableDataCell>
+                <CTableDataCell>{itemVenda.quantidade}</CTableDataCell>
+                <CTableDataCell>{itemVenda.valor_total}</CTableDataCell>
+                <CTableDataCell>{itemVenda.produto?.nome}</CTableDataCell>
+                <CTableDataCell>{itemVenda.venda?.id}</CTableDataCell>
+                <CTableDataCell>{itemVenda.entrega?.id}</CTableDataCell>
                 <CTableDataCell>
                   <CButton
                     color="warning"
-                    onClick={() => navigate(`/item-venda/add?id=${item.id}`)}
+                    onClick={() => navigate(`/itemVenda/add?id=${item.id}`)}
                     className="me-2"
                   >
                     Editar
                   </CButton>
-                  <CButton color="danger" onClick={() => handleDelete(item.id)}>
+                  <CButton color="danger" onClick={() => handleDelete(itemVenda.id)}>
                     Excluir
                   </CButton>
                 </CTableDataCell>

@@ -73,9 +73,6 @@ const EntregaList = React.lazy(() => import('./views/entrega/EntregaList'))
 const EstoqueAdd = React.lazy(() => import('./views/estoque/EstoqueAdd'))
 const EstoqueList = React.lazy(() => import('./views/estoque/EstoqueList'))
 
-const ImagemProdutoAdd = React.lazy(() => import('./views/imagemProduto/ImagemProdutoAdd'))
-const ImagemProdutoList = React.lazy(() => import('./views/imagemProduto/ImagemProdutoList'))
-
 const PagamentoAdd = React.lazy(() => import('./views/pagamento/PagamentoAdd'))
 const PagamentoList = React.lazy(() => import('./views/pagamento/PagamentoList'))
 
@@ -112,9 +109,6 @@ const routes = [
 
   { path: '/entrega/list', name: 'Entrega Listar', element: EntregaList },
   { path: '/entrega/add', name: 'Entrega Adicionar', element: EntregaAdd },
-
-  { path: '/imagemProduto/list', name: 'Imagem Produto Listar', element: ImagemProdutoList },
-  { path: '/imagemProduto/add', name: 'Imagem Produto Adicionar', element: ImagemProdutoAdd },
 
   { path: '/pagamento/list', name: 'Pagamento Listar', element: PagamentoList },
   { path: '/pagamento/add', name: 'Pagamento Adicionar', element: PagamentoAdd },

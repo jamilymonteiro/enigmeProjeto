@@ -6,6 +6,7 @@ import {
   CForm,
   CFormInput,
   CFormLabel,
+  CFormSelect,
   CModal,
   CModalBody,
   CModalFooter,
@@ -16,9 +17,13 @@ import api from '../../services/axiosConfig';
 import { useLocation } from 'react-router-dom';
 
 const VendaAdd = () => {
-  const [data, setData] = useState('');
-  const [cliente, setCliente] = useState('');
-  const [endereco, setEndereco] = useState('');
+  const [venda, setVenda] = useState({
+    data: '',
+    cliente: { id: '' },
+    endereco: { id: '' }, // Alterado para armazenar o endereço associado
+  });
+  const [clientes, setClientes] = useState([]);
+  const [enderecos, setEnderecos] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
   const location = useLocation();
@@ -26,49 +31,52 @@ const VendaAdd = () => {
   const vendaId = searchParams.get('id');
 
   useEffect(() => {
-    if (vendaId) {
-      const fetchVenda = async () => {
-        try {
-          const response = await api.get(`/venda/${vendaId}`);
-          const { data, cliente, endereco } = response.data;
-          setData(data);
-          setCliente(cliente);
-          setEndereco(endereco);
-        } catch (error) {
-          console.error("Erro ao carregar venda:", error);
+    const fetchClientesEEnderecos = async () => {
+      try {
+        // Carrega os clientes disponíveis
+        const clientesResponse = await api.get('/cliente');
+        setClientes(clientesResponse.data);
+
+        // Carrega os endereços disponíveis
+        const enderecosResponse = await api.get('/endereco');
+        setEnderecos(enderecosResponse.data);
+
+        // Se estamos editando, busca os dados da venda
+        if (vendaId) {
+          const vendaResponse = await api.get(`/venda/${vendaId}`);
+          setVenda(vendaResponse.data);
         }
-      };
-      fetchVenda();
-    }
+      } catch (error) {
+        console.error('Erro ao carregar clientes ou endereços:', error);
+      }
+    };
+
+    fetchClientesEEnderecos();
   }, [vendaId]);
 
   const handleSave = async (e) => {
     e.preventDefault();
 
-    const vendaData = {
-      data,
-      cliente,
-      endereco,
-    };
-
     try {
       if (vendaId) {
-        await api.put(`/venda/${vendaId}`, vendaData);
+        await api.put(`/venda/${vendaId}`, venda);
       } else {
-        await api.post('/venda', vendaData);
+        await api.post('/venda', venda);
       }
       setModalVisible(true);
       resetForm();
     } catch (error) {
-      console.error("Erro ao salvar a venda:", error);
+      console.error('Erro ao salvar a venda:', error);
       alert('Erro ao salvar a venda');
     }
   };
 
   const resetForm = () => {
-    setData('');
-    setCliente('');
-    setEndereco('');
+    setVenda({
+      data: '',
+      cliente: { id: '' },
+      endereco: { id: '' },
+    });
   };
 
   return (
@@ -82,36 +90,55 @@ const VendaAdd = () => {
               <CFormInput
                 type="date"
                 id="dataVenda"
-                value={data}
-                onChange={(e) => setData(e.target.value)}
+                value={venda.data}
+                onChange={(e) => setVenda({ ...venda, data: e.target.value })}
                 required
               />
             </div>
             <div className="mb-3">
               <CFormLabel htmlFor="clienteVenda">Cliente</CFormLabel>
-              <CFormInput
-                type="text"
+              <CFormSelect
                 id="clienteVenda"
-                value={cliente}
-                onChange={(e) => setCliente(e.target.value)}
+                value={venda.cliente.id}
+                onChange={(e) =>
+                  setVenda({ ...venda, cliente: { id: parseInt(e.target.value, 10) } })
+                }
                 required
-              />
+              >
+                <option value="">Selecione um Cliente</option>
+                {clientes.map((cliente) => (
+                  <option key={cliente.id} value={cliente.id}>
+                    {cliente.nome}
+                  </option>
+                ))}
+              </CFormSelect>
             </div>
             <div className="mb-3">
               <CFormLabel htmlFor="enderecoVenda">Endereço</CFormLabel>
-              <CFormInput
-                type="text"
+              <CFormSelect
                 id="enderecoVenda"
-                value={endereco}
-                onChange={(e) => setEndereco(e.target.value)}
+                value={venda.endereco.id}
+                onChange={(e) =>
+                  setVenda({ ...venda, endereco: { id: parseInt(e.target.value, 10) } })
+                }
                 required
-              />
+              >
+                <option value="">Selecione um Endereço</option>
+                {enderecos.map((endereco) => (
+                  <option key={endereco.id} value={endereco.id}>
+                    {endereco.rua}, {endereco.numero} - {endereco.bairro}
+                  </option>
+                ))}
+              </CFormSelect>
             </div>
-            <CButton type="submit" color="primary">Salvar</CButton>
+            <CButton type="submit" color="primary">
+              Salvar
+            </CButton>
           </CForm>
         </CCardBody>
       </CCard>
 
+      {/* Modal de Confirmação */}
       <CModal visible={modalVisible} onClose={() => setModalVisible(false)}>
         <CModalHeader>
           <CModalTitle>Sucesso</CModalTitle>

@@ -4,8 +4,9 @@ import {
   CCard,
   CCardBody,
   CForm,
-  CFormSelect,
+  CFormInput,
   CFormLabel,
+  CFormSelect,
   CModal,
   CModalBody,
   CModalFooter,
@@ -16,8 +17,8 @@ import api from '../../services/axiosConfig';
 import { useLocation } from 'react-router-dom';
 
 const PagamentoAdd = () => {
-  const [itemVenda, setItemVenda] = useState('');
   const [itensVenda, setItensVenda] = useState([]);
+  const [itemVenda, setItemVenda] = useState('');
   const [metodo_pagamento, setMetodoPagamento] = useState('');
   const [status_pagamento, setStatusPagamento] = useState('');
   const [data_pagamento, setDataPagamento] = useState('');
@@ -28,36 +29,35 @@ const PagamentoAdd = () => {
   const searchParams = new URLSearchParams(location.search);
   const pagamentoId = searchParams.get('id');
 
-  // Opções fixas para método de pagamento
-  const metodosPagamento = ['Cartão de Crédito', 'Pix', 'Cartão de Débito', 'Boleto'];
-
-  // Carregar os itens de venda disponíveis
   useEffect(() => {
     const fetchItensVenda = async () => {
       try {
-        const response = await api.get('/itemVenda'); // Endpoint para buscar itens de venda
-        setItensVenda(response.data); // Assuma que `response.data` é uma lista de itens de venda
+        const response = await api.get('/itemVenda');
+
+        if (response.data) {
+          setItensVenda(response.data);
+        } else {
+          console.error("Erro ao carregar itens de venda.");
+        }
       } catch (error) {
         console.error('Erro ao carregar itens de venda:', error);
       }
     };
-    fetchItensVenda();
-  }, []);
 
-  // Carregar dados de pagamento, se estiver editando
-  useEffect(() => {
+    fetchItensVenda();
+
     if (pagamentoId) {
       const fetchPagamento = async () => {
         try {
           const response = await api.get(`/pagamento/${pagamentoId}`);
           const { itemVenda, metodo_pagamento, status_pagamento, data_pagamento, valor_pago } = response.data;
-          setItemVenda(itemVenda);
+          setItemVenda(itemVenda.id);
           setMetodoPagamento(metodo_pagamento);
           setStatusPagamento(status_pagamento);
           setDataPagamento(data_pagamento);
           setValorPago(valor_pago);
         } catch (error) {
-          console.error('Erro ao carregar pagamento:', error);
+          console.error("Erro ao carregar pagamento:", error);
         }
       };
       fetchPagamento();
@@ -68,7 +68,7 @@ const PagamentoAdd = () => {
     e.preventDefault();
 
     const pagamentoData = {
-      itemVenda,
+      itemVenda: { id: itemVenda },
       metodo_pagamento,
       status_pagamento,
       data_pagamento,
@@ -84,8 +84,8 @@ const PagamentoAdd = () => {
       setModalVisible(true);
       resetForm();
     } catch (error) {
-      console.error('Erro ao salvar o pagamento:', error);
-      alert('Erro ao salvar o pagamento');
+      console.error("Erro ao salvar pagamento:", error);
+      alert('Erro ao salvar pagamento');
     }
   };
 
@@ -104,17 +104,17 @@ const PagamentoAdd = () => {
           <h4>{pagamentoId ? 'Editar Pagamento' : 'Adicionar Pagamento'}</h4>
           <CForm onSubmit={handleSave}>
             <div className="mb-3">
-              <CFormLabel htmlFor="itemVendaPagamento">Item de Venda</CFormLabel>
+              <CFormLabel htmlFor="itemVenda">Item de Venda</CFormLabel>
               <CFormSelect
-                id="itemVendaPagamento"
+                id="itemVenda"
                 value={itemVenda}
                 onChange={(e) => setItemVenda(e.target.value)}
                 required
               >
-                <option value="" disabled>Selecione um item de venda</option>
+                <option value="">Selecione um Item de Venda</option>
                 {itensVenda.map((itemVenda) => (
                   <option key={itemVenda.id} value={itemVenda.id}>
-                    {itemVenda.descricao || `ItemVenda #${itemVenda.id}`} {/* Personalize com a propriedade correta */}
+                    {itemVenda.id}
                   </option>
                 ))}
               </CFormSelect>
@@ -127,12 +127,10 @@ const PagamentoAdd = () => {
                 onChange={(e) => setMetodoPagamento(e.target.value)}
                 required
               >
-                <option value="" disabled>Selecione a forma de pagamento</option>
-                {metodosPagamento.map((metodo, index) => (
-                  <option key={index} value={metodo}>
-                    {metodo}
-                  </option>
-                ))}
+                <option value="">Selecione um Método</option>
+                <option value="cartao">Cartão</option>
+                <option value="boleto">Boleto</option>
+                <option value="pix">Pix</option>
               </CFormSelect>
             </div>
             <div className="mb-3">
@@ -143,10 +141,10 @@ const PagamentoAdd = () => {
                 onChange={(e) => setStatusPagamento(e.target.value)}
                 required
               >
-                <option value="" disabled>Selecione o status</option>
-                <option value="Pendente">Pendente</option>
-                <option value="Pago">Pago</option>
-                <option value="Cancelado">Cancelado</option>
+                <option value="">Selecione um Status</option>
+                <option value="pendente">Pendente</option>
+                <option value="realizado">Realizado</option>
+                <option value="cancelado">Cancelado</option>
               </CFormSelect>
             </div>
             <div className="mb-3">
@@ -162,7 +160,7 @@ const PagamentoAdd = () => {
             <div className="mb-3">
               <CFormLabel htmlFor="valorPago">Valor Pago</CFormLabel>
               <CFormInput
-                type="number"
+                type="text"
                 id="valorPago"
                 value={valor_pago}
                 onChange={(e) => setValorPago(e.target.value)}
@@ -174,6 +172,7 @@ const PagamentoAdd = () => {
         </CCardBody>
       </CCard>
 
+      {/* Modal de Confirmação */}
       <CModal visible={modalVisible} onClose={() => setModalVisible(false)}>
         <CModalHeader>
           <CModalTitle>Sucesso</CModalTitle>

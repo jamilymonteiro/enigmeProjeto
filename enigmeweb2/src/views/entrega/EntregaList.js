@@ -66,7 +66,6 @@ const EntregaList = () => {
             <CTableHead>
               <CTableRow>
                 <CTableHeaderCell>ID</CTableHeaderCell>
-                <CTableHeaderCell>Item de Venda</CTableHeaderCell>
                 <CTableHeaderCell>Quantidade</CTableHeaderCell>
                 <CTableHeaderCell>Transportadora</CTableHeaderCell>
                 <CTableHeaderCell>Código de Rastreio</CTableHeaderCell>
@@ -77,7 +76,6 @@ const EntregaList = () => {
               {entregas.map((entrega) => (
                 <CTableRow key={entrega.id}>
                   <CTableDataCell>{entrega.id}</CTableDataCell>
-                  <CTableDataCell>{entrega.itemVenda?.descricao}</CTableDataCell>
                   <CTableDataCell>{entrega.quantidade}</CTableDataCell>
                   <CTableDataCell>{entrega.transportadora?.nome}</CTableDataCell>
                   <CTableDataCell>{entrega.codigoRastreio}</CTableDataCell>

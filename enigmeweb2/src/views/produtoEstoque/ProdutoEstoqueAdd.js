@@ -6,6 +6,7 @@ import {
   CForm,
   CFormInput,
   CFormLabel,
+  CFormSelect,
   CModal,
   CModalBody,
   CModalFooter,
@@ -13,110 +14,133 @@ import {
   CModalTitle,
 } from '@coreui/react';
 import api from '../../services/axiosConfig';
-import { useLocation } from 'react-router-dom';
 
 const ProdutoEstoqueAdd = () => {
-  const [produto, setProduto] = useState('');
-  const [preco, setPreco] = useState('');
-  const [estoque, setEstoque] = useState('');
+  const [produtoEstoque, setProdutoEstoque] = useState({
+    produto: { id: '' },
+    preco: '',
+    estoque: { id: '' },
+  });
+  const [produtos, setProdutos] = useState([]);
+  const [estoques, setEstoques] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const produtoEstoqueId = searchParams.get('id');
-
   useEffect(() => {
-    if (produtoEstoqueId) {
-      const fetchProdutoEstoque = async () => {
-        try {
-          const response = await api.get(`/produtoestoque/${produtoEstoqueId}`);
-          const { produto, preco, estoque } = response.data;
-          setProduto(produto);
-          setPreco(preco);
-          setEstoque(estoque);
-        } catch (error) {
-          console.error("Erro ao carregar produto estoque:", error);
-        }
-      };
-      fetchProdutoEstoque();
-    }
-  }, [produtoEstoqueId]);
+    const fetchData = async () => {
+      try {
+        const produtosResponse = await api.get('/produto');
+        setProdutos(produtosResponse.data);
+
+        const estoquesResponse = await api.get('/estoque');
+        setEstoques(estoquesResponse.data);
+      } catch (error) {
+        console.error('Erro ao carregar produtos ou estoques:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleSave = async (e) => {
     e.preventDefault();
 
-    const produtoEstoqueData = {
-      produto,
-      preco,
-      estoque,
-    };
-
     try {
-      if (produtoEstoqueId) {
-        await api.put(`/produtoestoque/${produtoEstoqueId}`, produtoEstoqueData);
-      } else {
-        await api.post('/produtoestoque', produtoEstoqueData);
-      }
+      await api.post('/produtoEstoque', produtoEstoque);
       setModalVisible(true);
       resetForm();
     } catch (error) {
-      console.error("Erro ao salvar o produto estoque:", error);
-      alert('Erro ao salvar o produto estoque');
+      console.error('Erro ao salvar o Produto no Estoque:', error);
+      alert('Erro ao salvar o Produto no Estoque');
     }
   };
 
   const resetForm = () => {
-    setProduto('');
-    setPreco('');
-    setEstoque('');
+    setProdutoEstoque({
+      produto: { id: '' },
+      preco: '',
+      estoque: { id: '' },
+    });
   };
 
   return (
     <>
       <CCard>
         <CCardBody>
-          <h4>{produtoEstoqueId ? 'Editar Produto Estoque' : 'Adicionar Produto Estoque'}</h4>
+          <h4>Adicionar Produto no Estoque</h4>
           <CForm onSubmit={handleSave}>
             <div className="mb-3">
-              <CFormLabel htmlFor="produtoEstoqueProduto">Produto</CFormLabel>
-              <CFormInput
-                type="text"
-                id="produtoEstoqueProduto"
-                value={produto}
-                onChange={(e) => setProduto(e.target.value)}
+              <CFormLabel htmlFor="produto">Produto</CFormLabel>
+              <CFormSelect
+                id="produto"
+                value={produtoEstoque.produto.id}
+                onChange={(e) =>
+                  setProdutoEstoque({
+                    ...produtoEstoque,
+                    produto: { id: parseInt(e.target.value, 10) },
+                  })
+                }
                 required
-              />
+              >
+                <option value="">Selecione um Produto</option>
+                {produtos.map((produto) => (
+                  <option key={produto.id} value={produto.id}>
+                    {produto.nome}
+                  </option>
+                ))}
+              </CFormSelect>
             </div>
+
             <div className="mb-3">
-              <CFormLabel htmlFor="produtoEstoquePreco">Preço</CFormLabel>
+              <CFormLabel htmlFor="preco">Preço</CFormLabel>
               <CFormInput
                 type="number"
-                id="produtoEstoquePreco"
-                value={preco}
-                onChange={(e) => setPreco(e.target.value)}
+                id="preco"
+                value={produtoEstoque.preco}
+                onChange={(e) =>
+                  setProdutoEstoque({
+                    ...produtoEstoque,
+                    preco: parseFloat(e.target.value),
+                  })
+                }
                 required
               />
             </div>
+
             <div className="mb-3">
-              <CFormLabel htmlFor="produtoEstoqueEstoque">Estoque</CFormLabel>
-              <CFormInput
-                type="text"
-                id="produtoEstoqueEstoque"
-                value={estoque}
-                onChange={(e) => setEstoque(e.target.value)}
+              <CFormLabel htmlFor="estoque">Estoque</CFormLabel>
+              <CFormSelect
+                id="estoque"
+                value={produtoEstoque.estoque.id}
+                onChange={(e) =>
+                  setProdutoEstoque({
+                    ...produtoEstoque,
+                    estoque: { id: parseInt(e.target.value, 10) },
+                  })
+                }
                 required
-              />
+              >
+                <option value="">Selecione um Estoque</option>
+                {estoques.map((estoque) => (
+                  <option key={estoque.id} value={estoque.id}>
+                    {estoque.id}
+                  </option>
+                ))}
+              </CFormSelect>
             </div>
-            <CButton type="submit" color="primary">Salvar</CButton>
+
+            <CButton type="submit" color="primary">
+              Salvar
+            </CButton>
           </CForm>
         </CCardBody>
       </CCard>
 
+      {/* Modal de Confirmação */}
       <CModal visible={modalVisible} onClose={() => setModalVisible(false)}>
         <CModalHeader>
           <CModalTitle>Sucesso</CModalTitle>
         </CModalHeader>
-        <CModalBody>Produto estoque salvo com sucesso!</CModalBody>
+        <CModalBody>Produto no Estoque salvo com sucesso!</CModalBody>
         <CModalFooter>
           <CButton color="primary" onClick={() => setModalVisible(false)}>
             Fechar
